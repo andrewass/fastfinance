@@ -2,7 +2,6 @@ import json
 
 from fastapi import FastAPI
 
-import random
 import yfinance as yf
 
 app = FastAPI(version="0.0.1")

@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fastfinance-deployment
+  labels:
+    app: fastfinance
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fastfinance
+  template:
+    metadata:
+      labels:
+        app: fastfinance
+    spec:
+      containers:
+        - name: fastfinance
+          image: fastfinance-image
+          ports:
+            - containerPort: 8079
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fastfinance-service
+spec:
+  selector:
+    app: fastfinance
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 8079
+      targetPort: 8079
+      nodePort: 30113
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-fastfinance
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: "fastfinance.io"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: fastfinance-service
+                port:
+                  number: 8079

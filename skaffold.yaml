@@ -1,0 +1,10 @@
+apiVersion: skaffold/v4beta1
+kind: Config
+build:
+  artifacts:
+  - image: fastfinance-image
+    docker:
+      dockerfile: Dockerfile
+manifests:
+  rawYaml:
+  - k8s/app.yaml
