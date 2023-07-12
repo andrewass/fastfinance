@@ -18,7 +18,7 @@ spec:
         - name: fastfinance
           image: fastfinance-image
           ports:
-            - containerPort: 8079
+            - containerPort: 8000
 
 ---
 apiVersion: v1
@@ -31,9 +31,9 @@ spec:
   type: NodePort
   ports:
     - protocol: TCP
-      port: 8079
-      targetPort: 8079
-      nodePort: 30113
+      port: 8000
+      targetPort: 8000
+      nodePort: 30132
 
 ---
 
@@ -53,4 +53,4 @@ spec:
               service:
                 name: fastfinance-service
                 port:
-                  number: 8079
+                  number: 8000
