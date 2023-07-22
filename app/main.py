@@ -1,7 +1,7 @@
 from fastapi import FastAPI
-from .routers import price
+from .price import pricerouter
 
 app = FastAPI(version="0.0.1")
 
-app.include_router(price.router)
+app.include_router(pricerouter.router)
 
