@@ -1,12 +1,12 @@
 from fastapi import APIRouter
 from .pricerequests import SymbolsRequest, Period
-from .priceservice import get_historic_prices	
+from .priceservice import get_historic_prices, get_current_price	
 
 router = APIRouter(
     prefix="/price",
     tags=["price"],
 )
-
+	
 @router.get("/current-price-symbol/{symbol}")
 async def get_current_price_symbol(symbol: str):
     return get_current_price(symbol)

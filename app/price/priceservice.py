@@ -2,7 +2,7 @@ import yfinance as yf
 
 from pandas import DataFrame
 from .pricerequests import Period
-from .priceresponses import HistoricPrice
+from .priceresponses import HistoricPrice, CurrentPrice
 
 
 def get_current_price(symbol: str):
