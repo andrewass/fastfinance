@@ -6,11 +6,13 @@ from .priceresponses import HistoricPrice, CurrentPrice
 
 
 def get_current_price(symbol: str):
-    ticker = yf.Ticker(symbol)
-    current_price = ticker.info.get("currentPrice")
-    previous_close = ticker.info.get("previousClose")
-    currency = ticker.info.get("currency")
-    return CurrentPrice(symbol, current_price, previous_close, currency)
+    info = yf.Ticker(symbol).info
+    return CurrentPrice(
+		symbol = symbol, 
+		currentPrice = info.get("currentPrice"), 
+		previousClose = info.get("previousClose"), 
+		currency = info.get("currency")
+	)
 
 
 def get_historic_prices(symbol: str, period: Period):
