@@ -5,6 +5,7 @@ from datetime import datetime
 @dataclass
 class CurrentPrice:
     symbol: str
+    companyName: str
     currentPrice: float
     previousClose: float
     currency: str

@@ -9,6 +9,7 @@ def get_current_price(symbol: str):
     info = yf.Ticker(symbol).info
     return CurrentPrice(
         symbol=symbol,
+        companyName=info.get("shortName"),
         currentPrice=info.get("currentPrice"),
         previousClose=info.get("previousClose"),
         currency=info.get("currency")
