@@ -1,8 +1,8 @@
 import yfinance as yf
 
-from pandas import DataFrame
+from pandas import DataFrame, Timestamp
 from .pricerequests import Period
-from .priceresponses import HistoricPrice, CurrentPrice
+from .priceresponses import HistoricalPrice, CurrentPrice
 
 
 def get_current_price(symbol: str):
@@ -16,17 +16,16 @@ def get_current_price(symbol: str):
     )
 
 
-def get_historic_prices(symbol: str, period: Period):
+def get_historical_prices(symbol: str, period: Period):
     ticker = yf.Ticker(symbol)
     history = ticker.history(period=period)
-    return map_historic(history, symbol)
+    return map_historical_prices(history)
 
 
-def map_historic(frame: DataFrame, symbol: str):
+def map_historical_prices(frame: DataFrame):
     history_list = []
     for index, row in frame.iterrows():
-        print(row)
-        date = row.name
+        date: Timestamp = row.name
         price = row.get("Close")
-        history_list.append(HistoricPrice(symbol, price, date))
+        history_list.append(HistoricalPrice(price, date.to_pydatetime().date()))
     return history_list

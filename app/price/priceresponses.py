@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import date
 
 
 @dataclass
@@ -12,7 +12,6 @@ class CurrentPrice:
 
 
 @dataclass
-class HistoricPrice:
-    symbol: str
+class HistoricalPrice:
     price: float
-    date: datetime
+    date: date

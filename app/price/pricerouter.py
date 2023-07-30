@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from .pricerequests import SymbolsRequest, Period
-from .priceservice import get_historic_prices, get_current_price
+from .priceservice import get_historical_prices, get_current_price
 
 router = APIRouter(
     prefix="/price",
@@ -18,6 +18,6 @@ async def get_current_price_symbols(symbols: SymbolsRequest):
     return list(map(get_current_price, symbols.symbols))
 
 
-@router.get("/historic-prices-symbol/{symbol}")
-async def get_historic_prices_symbol(symbol: str, period: Period):
-    return get_historic_prices(symbol, period)
+@router.get("/historical-prices-symbol")
+async def get_historical_prices_symbol(symbol: str, period: Period):
+    return get_historical_prices(symbol, period)
