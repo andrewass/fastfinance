@@ -1,4 +1,5 @@
 from fastapi import APIRouter
+from .holdersservice import get_holders_details
 
 router = APIRouter(
     prefix="/holders",
@@ -8,6 +9,4 @@ router = APIRouter(
 
 @router.get("/details/{symbol}")
 async def get_holder_details(symbol: str):
-    return get_holder_details(symbol)
-
-
+    return get_holders_details(symbol)
