@@ -3,7 +3,7 @@ from typing import Optional
 
 
 @dataclass
-class SymbolFinancials:
+class SymbolStatistics:
     symbol: str
     companyName: str
     currency: str

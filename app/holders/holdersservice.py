@@ -14,13 +14,14 @@ def get_holders_details(symbol: str):
 
 def map_holders(frame: DataFrame):
     holders_list = []
-    for index, row in frame.iterrows():
-        date: Timestamp = row.get("Date Reported")
-        holders_list.append(Holder(
-            name=row.get("Holder"),
-            dateReported=date.to_pydatetime().date(),
-            shares=row.get("Shares"),
-            percentageOut=row.get("% Out") * 100,
-            value=row.get("Value")
-        ))
+    if frame is not None:
+        for index, row in frame.iterrows():
+            date: Timestamp = row.get("Date Reported")
+            holders_list.append(Holder(
+                name=row.get("Holder"),
+                dateReported=date.to_pydatetime().date(),
+                shares=row.get("Shares"),
+                percentageOut=row.get("% Out") * 100,
+                value=row.get("Value")
+            ))
     return holders_list

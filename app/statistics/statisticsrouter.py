@@ -1,9 +1,9 @@
 from fastapi import APIRouter
-from .financialsservice import get_financial_details
+from .statisticsservice import get_financial_details
 
 router = APIRouter(
-    prefix="/financials",
-    tags=["financials"],
+    prefix="/statistics",
+    tags=["statistics"],
 )
 
 

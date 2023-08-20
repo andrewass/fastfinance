@@ -1,13 +1,13 @@
 import yfinance as yf
 
-from .financialsresponses import SymbolFinancials
+from .statisticsresponses import SymbolStatistics
 
 
 def get_financial_details(symbol: str):
     info = yf.Ticker(symbol).info
     dividend_rate = info.get("dividendRate")
     dividend_yield = info.get("dividendYield")
-    return SymbolFinancials(
+    return SymbolStatistics(
         symbol=symbol,
         companyName=info.get("shortName"),
         marketCap=info.get("marketCap"),
