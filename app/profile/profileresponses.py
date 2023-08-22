@@ -1,8 +1,8 @@
-from dataclasses import dataclass
+from pydantic import BaseModel
 
 
-@dataclass
-class Profile:
+class Profile(BaseModel):
+    companyName: str
     address: str
     city: str
     state: str

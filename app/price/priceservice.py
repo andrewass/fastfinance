@@ -27,5 +27,8 @@ def map_historical_prices(frame: DataFrame):
     for index, row in frame.iterrows():
         date: Timestamp = row.name
         price = row.get("Close")
-        history_list.append(HistoricalPrice(price, date.to_pydatetime().date()))
+        history_list.append(HistoricalPrice(
+            price=price,
+            date=date.to_pydatetime().date())
+        )
     return history_list

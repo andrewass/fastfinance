@@ -1,9 +1,8 @@
-from dataclasses import dataclass
 from datetime import date
+from pydantic import BaseModel
 
 
-@dataclass
-class Holder:
+class Holder(BaseModel):
     name: str
     shares: float
     dateReported: date
@@ -11,7 +10,6 @@ class Holder:
     value: float
 
 
-@dataclass
-class HoldersDetails:
+class HoldersDetails(BaseModel):
     institutionalHolders: list[Holder]
     mutualFundHolders: list[Holder]

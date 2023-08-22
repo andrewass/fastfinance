@@ -1,9 +1,8 @@
-from dataclasses import dataclass
+from pydantic import BaseModel
 from datetime import date
 
 
-@dataclass
-class CurrentPrice:
+class CurrentPrice(BaseModel):
     symbol: str
     companyName: str
     currentPrice: float
@@ -11,7 +10,6 @@ class CurrentPrice:
     currency: str
 
 
-@dataclass
-class HistoricalPrice:
+class HistoricalPrice(BaseModel):
     price: float
     date: date

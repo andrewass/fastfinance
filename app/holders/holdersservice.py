@@ -4,7 +4,7 @@ from pandas import DataFrame, Timestamp
 from .holdersresponse import HoldersDetails, Holder
 
 
-def get_holders_details(symbol: str):
+def get_holders_details_symbol(symbol: str):
     ticker = yf.Ticker(symbol)
     return HoldersDetails(
         institutionalHolders=map_holders(ticker.institutional_holders),
@@ -12,7 +12,7 @@ def get_holders_details(symbol: str):
     )
 
 
-def map_holders(frame: DataFrame):
+def map_holders(frame: DataFrame | None = None):
     holders_list = []
     if frame is not None:
         for index, row in frame.iterrows():

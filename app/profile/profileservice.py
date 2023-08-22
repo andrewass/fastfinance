@@ -5,6 +5,7 @@ from .profileresponses import Profile
 def get_profile(symbol: str):
     info = yf.Ticker(symbol).info
     return Profile(
+        companyName=info.get("shortName"),
         address=info.get("address1"),
         city=info.get("city"),
         country=info.get("country"),

@@ -7,6 +7,6 @@ router = APIRouter(
 )
 
 
-@router.get("/details-symbol/{symbol}")
+@router.get("/{symbol}")
 async def get_financial_details_symbol(symbol: str):
     return get_financial_details(symbol)
