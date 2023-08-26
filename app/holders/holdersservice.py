@@ -2,9 +2,11 @@ import yfinance as yf
 from pandas import DataFrame, Timestamp
 
 from .holdersresponse import HoldersDetails, Holder
+from ..cache.cachedecorator import cache
 
 
-def get_holders_details_symbol(symbol: str):
+@cache(duration=60)
+def get_holders_details_symbol(symbol: str) -> HoldersDetails:
     ticker = yf.Ticker(symbol)
     return HoldersDetails(
         institutionalHolders=map_holders(ticker.institutional_holders),
@@ -12,7 +14,7 @@ def get_holders_details_symbol(symbol: str):
     )
 
 
-def map_holders(frame: DataFrame | None = None):
+def map_holders(frame: DataFrame | None = None) -> list[Holder]:
     holders_list = []
     if frame is not None:
         for index, row in frame.iterrows():
