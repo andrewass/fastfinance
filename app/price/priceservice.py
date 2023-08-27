@@ -3,6 +3,7 @@ import yfinance as yf
 from pandas import DataFrame, Timestamp
 from .pricerequests import Period
 from .priceresponses import HistoricalPrice, CurrentPrice
+from ..cache.cachedecorator import simple_cache
 
 
 def get_current_price(symbol: str):
@@ -16,6 +17,7 @@ def get_current_price(symbol: str):
     )
 
 
+@simple_cache(limit=100)
 def get_historical_prices(symbol: str, period: Period):
     ticker = yf.Ticker(symbol)
     history = ticker.history(period=period)

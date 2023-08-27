@@ -1,28 +1,30 @@
 import json
-from collections import OrderedDict
+
 from ..settings.settings import settings
 
-CACHE = {}
-KEYS = []
+CACHE: dict[int, dict] = {}
 
 
-def sort(kwargs):
-    sorted_dict = OrderedDict()
-    for key, value in kwargs.items():
-        if isinstance(value, dict):
-            sorted_dict[key] = sort(value)
-        else:
-            sorted_dict[key] = value
-    return sorted_dict
+def fetch_function_response(function, function_id, *args, **kwargs):
+    function_dict = CACHE.get(function_id)
+    arguments_key = json.dumps([args, kwargs])
+    if arguments_key in function_dict:
+        return function_dict.get(arguments_key)
+    else:
+        response = function(*args, **kwargs)
+        function_dict.update({arguments_key: response})
+        return response
 
 
-def simple_cache(duration: int = 600) -> callable:
-    def _wrapper(function: callable):
-        def __wrapper(*args, **kwargs):
+def simple_cache(limit: int = 600) -> callable:
+    def _cached(function: callable):
+        def __cached(*args, **kwargs):
             if settings.cache_enabled:
-                cache_key = json.dumps([id(function), args, sort(kwargs)], separators=(",", ":"))
-                return function
+                function_id = id(function)
+                if function_id not in CACHE:
+                    CACHE.update({function_id: {}})
+                return fetch_function_response(function, function_id, *args, **kwargs)
             else:
-                return function
-        return __wrapper
-    return _wrapper
+                return function(*args, **kwargs)
+        return __cached
+    return _cached

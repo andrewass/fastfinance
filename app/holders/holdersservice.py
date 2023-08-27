@@ -2,10 +2,10 @@ import yfinance as yf
 from pandas import DataFrame, Timestamp
 
 from .holdersresponse import HoldersDetails, Holder
-from ..cache.cachedecorator import cache
+from ..cache.cachedecorator import simple_cache
 
 
-@cache(duration=60)
+@simple_cache(limit=100)
 def get_holders_details_symbol(symbol: str) -> HoldersDetails:
     ticker = yf.Ticker(symbol)
     return HoldersDetails(
