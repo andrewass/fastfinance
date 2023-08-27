@@ -17,7 +17,7 @@ def get_current_price(symbol: str):
     )
 
 
-@simple_cache(limit=100)
+@simple_cache(expire=100)
 def get_historical_prices(symbol: str, period: Period):
     ticker = yf.Ticker(symbol)
     history = ticker.history(period=period)

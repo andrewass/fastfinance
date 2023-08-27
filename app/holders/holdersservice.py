@@ -5,7 +5,7 @@ from .holdersresponse import HoldersDetails, Holder
 from ..cache.cachedecorator import simple_cache
 
 
-@simple_cache(limit=100)
+@simple_cache(expire=100)
 def get_holders_details_symbol(symbol: str) -> HoldersDetails:
     ticker = yf.Ticker(symbol)
     return HoldersDetails(
