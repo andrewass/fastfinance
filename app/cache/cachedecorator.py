@@ -2,6 +2,7 @@ import json
 import logging
 import sys
 import time
+from datetime import timedelta
 
 from ..settings.settings import settings
 
@@ -9,7 +10,7 @@ CACHE: dict[int, dict] = {}
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
 
-def fetch_function_response(function: callable, function_id: int, expire: int, *args, **kwargs):
+def fetch_function_response(function: callable, function_id: int, expire: timedelta, *args, **kwargs):
     function_dict = CACHE.get(function_id)
     arguments_key = json.dumps([args, kwargs])
     if arguments_key in function_dict:
@@ -24,7 +25,7 @@ def fetch_function_response(function: callable, function_id: int, expire: int, *
     return response
 
 
-def simple_cache(expire: int = 600) -> callable:
+def simple_cache(expire: timedelta = timedelta(hours=1)) -> callable:
     def _wrapper(function: callable):
         def __wrapper(*args, **kwargs):
             if settings.cache_enabled:
@@ -34,5 +35,7 @@ def simple_cache(expire: int = 600) -> callable:
                 return fetch_function_response(function, function_id, expire, *args, **kwargs)
             else:
                 return function(*args, **kwargs)
+
         return __wrapper
+
     return _wrapper
