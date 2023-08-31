@@ -8,7 +8,7 @@ class Cache:
     persistence: Persistence
 
     def __init__(self, persistence_type: PersistenceType):
-        self.persistence = self.__get_persistence(persistence_type)
+        self.__set_persistence(persistence_type)
 
     def get_value(self, key: str) -> dict:
         """Returns cache value based on key"""
@@ -16,9 +16,12 @@ class Cache:
     def insert(self, key: str, value: dict):
         """Insert a new key/value pair into the cache"""
 
-    def __get_persistence(self, persistence_type: PersistenceType) -> Persistence:
+    def __set_persistence(self, persistence_type: PersistenceType):
         match persistence_type:
             case PersistenceType.REDIS:
-                return RedisPersistence()
+                self.persistence = RedisPersistence()
             case PersistenceType.IN_MEMORY:
-                return MemoryPersistence()
+                self.persistence = MemoryPersistence()
+
+
+

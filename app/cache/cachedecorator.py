@@ -4,10 +4,12 @@ import sys
 import time
 from datetime import timedelta
 
+from cache import Cache
 from ..settings.settings import settings
 
-CACHE: dict[int, dict] = {}
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
+
+cache = Cache(persistence_type=settings.persistence_type)
 
 
 def fetch_function_response(function: callable, function_id: int, expire: timedelta, *args, **kwargs):
