@@ -1,4 +1,4 @@
-from persistence import Persistence
+from .persistence import Persistence
 
 
 class RedisPersistence(Persistence):

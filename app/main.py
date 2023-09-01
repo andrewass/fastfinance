@@ -1,10 +1,8 @@
 from fastapi import FastAPI
 
-from .cache.cache import Cache
 from .holders import holdersrouter
 from .price import pricerouter
 from .profile import profilerouter
-from .settings.settings import settings
 from .statistics import statisticsrouter
 
 app = FastAPI(version="0.0.1")

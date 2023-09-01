@@ -10,11 +10,17 @@ class Cache:
     def __init__(self, persistence_type: PersistenceType):
         self.__set_persistence(persistence_type)
 
+    def contains_function(self, function_id: int) -> bool:
+        self.persistence
+
+    def get_function_dict(self, function_id: int):
+        return self.persistence.get_value(function_id)
+
     def get_value(self, key: str) -> dict:
         """Returns cache value based on key"""
 
-    def insert(self, key: str, value: dict):
-        """Insert a new key/value pair into the cache"""
+    def update(self, function_key: int, arguments_key: str, value: dict):
+        self.persistence.update()
 
     def __set_persistence(self, persistence_type: PersistenceType):
         match persistence_type:
@@ -22,6 +28,3 @@ class Cache:
                 self.persistence = RedisPersistence()
             case PersistenceType.IN_MEMORY:
                 self.persistence = MemoryPersistence()
-
-
-

@@ -1,12 +1,17 @@
-from persistence import Persistence
+from .persistence import Persistence
 
 
 class MemoryPersistence(Persistence):
     cache: dict[int, dict] = {}
 
-    def get_value(self):
+    def has_key(self, key: int) -> bool:
+        return key in self.cache
+
+    def get_value(self, key: int):
+        return self.cache.get(key)
+
+    def update(self, function_key: int, arguments_key: str, value: dict):
+        self.cache.update({function_key: value})
 
     def clear_storage(self):
-        """Clear persistence storage"""
-        self.cache.
-        pass
+        self.cache.clear()

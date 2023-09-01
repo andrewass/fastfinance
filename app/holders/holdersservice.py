@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 import yfinance as yf
 from pandas import DataFrame, Timestamp
 
@@ -5,7 +7,7 @@ from .holdersresponse import HoldersDetails, Holder
 from ..cache.cachedecorator import simple_cache
 
 
-@simple_cache(expire=100)
+@simple_cache(expire=timedelta(days=1))
 def get_holders_details_symbol(symbol: str) -> HoldersDetails:
     ticker = yf.Ticker(symbol)
     return HoldersDetails(
