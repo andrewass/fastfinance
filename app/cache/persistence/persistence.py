@@ -1,15 +1,23 @@
 class Persistence:
 
-    def has_key(self, key: int) -> bool:
-        """Check if key exists in cache"""
+    def contains_function(self, function_id: int) -> bool:
+        """"""
         pass
 
-    def update(self, function_key: int, arguments_key: str, value: dict):
-        """Update cache with key value pair"""
+    def get_response_value(self, function_key: int, arguments_key: str):
+        """"""
         pass
 
-    def get_value(self, key: int):
-        """Fetch perisistence value"""
+    def remove_response_value(self, function_key: int, arguments_key: str):
+        """"""
+        pass
+
+    def set_response_value(self, function_key: int, arguments_key: str, value: dict):
+        """"""
+        pass
+
+    def set_function(self, function_key: int):
+        """"""
         pass
 
     def clear_storage(self):

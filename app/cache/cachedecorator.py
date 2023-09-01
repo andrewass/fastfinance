@@ -13,17 +13,16 @@ cache = Cache(persistence_type=settings.persistence_type)
 
 
 def fetch_function_response(function: callable, function_id: int, expire: timedelta, *args, **kwargs):
-    function_dict = cache.get_function_dict(function_id)
     arguments_key = json.dumps([args, kwargs])
-    if function_dict is not None and arguments_key in function_dict:
-        dict_value: dict = function_dict.get(arguments_key)
-        expiration = dict_value.get("added") + expire
+    response_value = cache.get_response_value(function_id, arguments_key)
+    if response_value is not None:
+        expiration = response_value.get("added") + expire
         if expiration > time.time():
-            return dict_value.get("data")
+            return response_value.get("data")
         else:
-            function_dict.pop(arguments_key)
+            cache.remove_response_value(function_id, arguments_key)
     response = function(*args, **kwargs)
-    cache.update(arguments_key, {"added": time.time(), "data": response})
+    cache.set_response_value(function_id, arguments_key, {"added": time.time(), "data": response})
     return response
 
 
