@@ -4,11 +4,14 @@ from .persistence import Persistence
 class MemoryPersistence(Persistence):
     cache: dict[int, dict] = {}
 
+    def __init__(self):
+        pass
+
     def contains_function(self, function_id: int) -> bool:
-        self.persistence
+        self.cache.__contains__(function_id)
 
     def get_response_value(self, function_key: int, arguments_key: str):
-        return self.persistence.get_value(function_key)
+        return self.cache.get(function_key)
 
     def remove_response_value(self, function_key: int, arguments_key: str):
         self.persistence.remove_response_value(function_key, arguments_key)

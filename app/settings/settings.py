@@ -1,10 +1,12 @@
 from pydantic_settings import BaseSettings
-from ..cache.persistence.persistence_type import PersistenceType
+
+from app.cache.persistence.memory_persistence import MemoryPersistence
+from app.cache.persistence.persistence import Persistence
 
 
 class Settings(BaseSettings):
-    cache_enabled: bool = True
-    persistence_type: PersistenceType = PersistenceType.IN_MEMORY
+    cache_enabled: bool = False
+    persistence : Persistence = MemoryPersistence()
 
 
 settings = Settings()

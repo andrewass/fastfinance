@@ -9,7 +9,7 @@ from ..settings.settings import settings
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
-cache = Cache(persistence_type=settings.persistence_type)
+cache = Cache(persistence=settings.persistence)
 
 
 def fetch_function_response(function: callable, function_id: int, expire: timedelta, *args, **kwargs):
