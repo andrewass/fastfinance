@@ -1,8 +1,7 @@
 import json
 import logging
 import sys
-import time
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 from .cache import Cache
 from ..settings.settings import settings
@@ -17,12 +16,12 @@ def fetch_function_response(function: callable, function_id: int, expire: timede
     response_value = cache.get_response_value(function_id, arguments_key)
     if response_value is not None:
         expiration = response_value.get("added") + expire
-        if expiration > time.time():
+        if expiration > datetime.now():
             return response_value.get("data")
         else:
             cache.remove_response_value(function_id, arguments_key)
     response = function(*args, **kwargs)
-    cache.set_response_value(function_id, arguments_key, {"added": time.time(), "data": response})
+    cache.set_response_value(function_id, arguments_key, {"added": datetime.now(), "data": response})
     return response
 
 
@@ -32,7 +31,7 @@ def simple_cache(expire: timedelta = timedelta(hours=1)) -> callable:
             if settings.cache_enabled:
                 function_id = id(function)
                 if not cache.contains_function(function_id):
-                    cache.update(function_id, {})
+                    cache.set_function(function_id)
                 return fetch_function_response(function, function_id, expire, *args, **kwargs)
             else:
                 return function(*args, **kwargs)

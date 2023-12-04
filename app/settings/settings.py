@@ -5,7 +5,7 @@ from app.cache.persistence.persistence import Persistence
 
 
 class Settings(BaseSettings):
-    cache_enabled: bool = False
+    cache_enabled: bool = True
     persistence : Persistence = MemoryPersistence()
 
 

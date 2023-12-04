@@ -7,8 +7,8 @@ class Cache:
     def __init__(self, persistence: Persistence):
         self.persistence = persistence
 
-    def contains_function(self, function_id: int):
-        self.persistence.contains_function(function_id)
+    def contains_function(self, function_id: int) -> bool:
+        return self.persistence.contains_function(function_id)
 
     def get_response_value(self, function_key: int, arguments_key: str):
         return self.persistence.get_response_value(function_key, arguments_key)
