@@ -4,19 +4,15 @@ class Persistence:
         """"""
         pass
 
-    def get_response_value(self, function_key: int, arguments_key: str):
+    def get_response_value(self, key: str):
         """"""
         pass
 
-    def remove_response_value(self, function_key: int, arguments_key: str):
+    def remove_response_value(self, key: str):
         """"""
         pass
 
-    def set_response_value(self, function_key: int, arguments_key: str, value: dict):
-        """"""
-        pass
-
-    def set_function(self, function_key: int):
+    def set_response_value(self, key: str, value: dict):
         """"""
         pass
 

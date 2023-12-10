@@ -11,17 +11,19 @@ logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 cache = Cache(persistence=settings.persistence)
 
 
-def fetch_function_response(function: callable, function_id: int, expire: timedelta, *args, **kwargs):
+def fetch_function_response(function: callable, expire: timedelta, *args, **kwargs):
+    function_key = str(id(function))
     arguments_key = json.dumps([args, kwargs])
-    response_value = cache.get_response_value(function_id, arguments_key)
+    combined_key = function_key + " " + arguments_key
+    response_value = cache.get_response_value(combined_key)
     if response_value is not None:
         expiration = response_value.get("added") + expire
         if expiration > datetime.now():
             return response_value.get("data")
         else:
-            cache.remove_response_value(function_id, arguments_key)
+            cache.remove_response_value(combined_key)
     response = function(*args, **kwargs)
-    cache.set_response_value(function_id, arguments_key, {"added": datetime.now(), "data": response})
+    cache.set_response_value(combined_key, {"added": datetime.now(), "data": response})
     return response
 
 
@@ -29,10 +31,7 @@ def simple_cache(expire: timedelta = timedelta(hours=1)) -> callable:
     def _wrapper(function: callable):
         def __wrapper(*args, **kwargs):
             if settings.cache_enabled:
-                function_id = id(function)
-                if not cache.contains_function(function_id):
-                    cache.set_function(function_id)
-                return fetch_function_response(function, function_id, expire, *args, **kwargs)
+                return fetch_function_response(function, expire, *args, **kwargs)
             else:
                 return function(*args, **kwargs)
 
