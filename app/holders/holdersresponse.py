@@ -1,13 +1,18 @@
 from datetime import date
-from pydantic import BaseModel
+
+from pydantic import BaseModel, field_serializer
 
 
 class Holder(BaseModel):
     name: str
     shares: float
-    dateReported: date
+    reported: date
     percentageOut: float
     value: float
+
+    @field_serializer("reported")
+    def serialize_reported(self, reported: date, _info):
+        return reported.strftime("%Y-%m-%d")
 
 
 class HoldersDetails(BaseModel):

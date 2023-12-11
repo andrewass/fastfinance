@@ -23,7 +23,7 @@ def map_holders(frame: DataFrame | None = None) -> list[Holder]:
             date: Timestamp = row.get("Date Reported")
             holders_list.append(Holder(
                 name=row.get("Holder"),
-                dateReported=date.to_pydatetime().date(),
+                reported=date.to_pydatetime().date(),
                 shares=row.get("Shares"),
                 percentageOut=row.get("% Out") * 100,
                 value=row.get("Value")
