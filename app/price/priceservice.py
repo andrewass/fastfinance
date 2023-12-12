@@ -4,7 +4,7 @@ import yfinance as yf
 from pandas import DataFrame, Timestamp
 
 from .pricerequests import Period
-from .priceresponses import HistoricalPrice, CurrentPrice
+from .priceresponses import HistoricalPrice, CurrentPrice, HistoricalPricesResponse
 from ..cache.cachedecorator import simple_cache
 
 
@@ -19,11 +19,11 @@ def get_current_price(symbol: str):
     )
 
 
-@simple_cache(expire=timedelta(days=1))
+@simple_cache(expire=timedelta(minutes=10))
 def get_historical_prices(symbol: str, period: Period):
     ticker = yf.Ticker(symbol)
     history = ticker.history(period=period)
-    return map_historical_prices(history)
+    return HistoricalPricesResponse(prices=map_historical_prices(history))
 
 
 def map_historical_prices(frame: DataFrame):
@@ -33,6 +33,6 @@ def map_historical_prices(frame: DataFrame):
         price = row.get("Close")
         history_list.append(HistoricalPrice(
             price=price,
-            date=date.to_pydatetime().date())
+            price_date=date.to_pydatetime().date())
         )
     return history_list

@@ -1,5 +1,6 @@
-from pydantic import BaseModel
 from datetime import date
+
+from pydantic import BaseModel, field_serializer
 
 
 class CurrentPrice(BaseModel):
@@ -12,4 +13,12 @@ class CurrentPrice(BaseModel):
 
 class HistoricalPrice(BaseModel):
     price: float
-    date: date
+    price_date: date
+
+    @field_serializer("price_date")
+    def serialize_price_date(self, price_date: date, _info):
+        return price_date.strftime("%Y-%m-%d")
+
+
+class HistoricalPricesResponse(BaseModel):
+    prices: list[HistoricalPrice]

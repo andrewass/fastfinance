@@ -1,4 +1,4 @@
-import json
+import hashlib
 import logging
 import sys
 from datetime import timedelta, datetime
@@ -13,19 +13,17 @@ cache = Cache(persistence=settings.persistence)
 
 
 def fetch_function_response(function: callable, expire: timedelta, *args, **kwargs):
-    function_key = str(id(function))
-    arguments_key = json.dumps([args, kwargs])
-    combined_key = function_key + " " + arguments_key
-    response_value = cache.get_response_value(combined_key)
+    cache_key = create_cache_key(function, args, kwargs)
+    response_value = cache.get_response_value(cache_key)
     if response_value is not None:
         expiration = response_value.get("added") + expire.total_seconds()
         if expiration > datetime.now().timestamp():
             return response_value.get("data")
         else:
-            cache.remove_response_value(combined_key)
+            cache.remove_response_value(cache_key)
     response = function(*args, **kwargs)
     cache.set_response_value(
-        combined_key,
+        cache_key,
         CacheResponse(added=datetime.now(), data=response.model_dump()).model_dump()
     )
     return response
@@ -42,3 +40,9 @@ def simple_cache(expire: timedelta = timedelta(hours=1)) -> callable:
         return __wrapper
 
     return _wrapper
+
+
+def create_cache_key(function: callable, *args, **kwargs) -> str:
+    function_key = hashlib.md5(function.__name__.encode("utf-8")).hexdigest()
+    args_key = hashlib.md5(f"{args}{kwargs}".encode("utf-8")).hexdigest() if args or kwargs else ""
+    return f"{function_key}.{args_key}"

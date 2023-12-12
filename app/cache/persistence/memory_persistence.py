@@ -2,7 +2,7 @@ from .persistence import Persistence
 
 
 class MemoryPersistence(Persistence):
-    cache: dict[int, dict] = {}
+    cache: dict[str, dict] = {}
 
     def __init__(self):
         pass
@@ -15,6 +15,3 @@ class MemoryPersistence(Persistence):
 
     def set_response_value(self, key: str, value: dict):
         self.cache[key] = value
-
-    def clear_storage(self):
-        self.cache.clear()

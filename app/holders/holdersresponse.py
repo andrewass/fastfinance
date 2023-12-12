@@ -15,6 +15,6 @@ class Holder(BaseModel):
         return reported.strftime("%Y-%m-%d")
 
 
-class HoldersDetails(BaseModel):
+class HoldersResponse(BaseModel):
     institutionalHolders: list[Holder]
     mutualFundHolders: list[Holder]

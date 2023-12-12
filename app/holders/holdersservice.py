@@ -3,14 +3,14 @@ from datetime import timedelta
 import yfinance as yf
 from pandas import DataFrame, Timestamp
 
-from .holdersresponse import HoldersDetails, Holder
+from .holdersresponse import HoldersResponse, Holder
 from ..cache.cachedecorator import simple_cache
 
 
-@simple_cache(expire=timedelta(days=1))
-def get_holders_details_symbol(symbol: str) -> HoldersDetails:
+@simple_cache(expire=timedelta(minutes=5))
+def get_holders_details_symbol(symbol: str) -> HoldersResponse:
     ticker = yf.Ticker(symbol)
-    return HoldersDetails(
+    return HoldersResponse(
         institutionalHolders=map_holders(ticker.institutional_holders),
         mutualFundHolders=map_holders(ticker.mutualfund_holders)
     )
