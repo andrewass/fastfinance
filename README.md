@@ -12,3 +12,39 @@ Using [Uvicorn](https://www.uvicorn.org/) as ASGI web server
 uvicorn app.main:app
 ```
 
+### Endpoints:
+
+#### Holders :
+``` {.python}
+GET /holders/{symbol}
+```
+* Get holders for a symbol
+
+#### Price
+``` {.python}
+GET /price/current-price/{symbol}
+```
+* Current price of a symbol
+
+``` {.python}
+POST /price/current-price-symbols
+```
+* Current price of a list of symbols
+
+``` {.python}
+GET /price/historical-prices
+```
+* Historical prices of a symbol
+
+
+##### Profile
+``` {.python}
+GET /profile/{symbol}
+```
+* Profile of a symbol. Includes data such as location, industry and business summary.
+
+#### Statistics
+``` {.python}
+GET /statistics/{symbol}
+```
+* Statistics of a symbol. Includes data such as market cap, price to book, price to earnings and earnings per share
