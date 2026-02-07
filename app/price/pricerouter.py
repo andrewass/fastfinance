@@ -13,7 +13,7 @@ async def get_current_price_symbol(symbol: str):
     return get_current_price(symbol)
 
 
-@router.post("/current-price-symbols")
+@router.post("/symbols")
 async def get_current_price_symbols(symbols: SymbolsRequest):
     return list(map(get_current_price, symbols.symbols))
 

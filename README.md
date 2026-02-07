@@ -1,5 +1,5 @@
 
-[![](https://img.shields.io/badge/python-3.11-blue.svg?style=flat)]("https://www.python.org/")
+[![](https://img.shields.io/badge/python-3.14-blue.svg?style=flat)]("https://www.python.org/")
 
 RESTful API based on [YFinance](https://github.com/ranaroussi/yfinance)
 
