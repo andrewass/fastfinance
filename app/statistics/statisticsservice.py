@@ -1,10 +1,32 @@
 import yfinance as yf
+from fastapi import HTTPException
 
 from .statisticsresponses import SymbolStatistics
 
 
+def require_fields(info: dict, symbol: str, fields: tuple[str, ...], context: str):
+    missing = [field for field in fields if info.get(field) is None]
+    if missing:
+        raise HTTPException(
+            status_code=502,
+            detail={
+                "message": "Missing expected fields from upstream provider",
+                "provider": "yfinance",
+                "context": context,
+                "symbol": symbol,
+                "missingFields": missing,
+            },
+        )
+
+
 def get_financial_details(symbol: str):
     info = yf.Ticker(symbol).info
+    require_fields(
+        info,
+        symbol,
+        ("shortName", "marketCap", "currency", "priceToBook", "trailingPE", "trailingEps"),
+        "statistics.details",
+    )
     dividend_rate = info.get("dividendRate")
     dividend_yield = info.get("dividendYield")
     return SymbolStatistics(

@@ -7,8 +7,9 @@ from ...settings.redissettings import redis_settings
 
 class RedisPersistence(Persistence):
     redis = redis.Redis(
-        host="localhost",
-        port=6379,
+        host=redis_settings.host,
+        port=redis_settings.port,
+        username=redis_settings.user,
         password=redis_settings.password,
         decode_responses=True
     )

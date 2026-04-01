@@ -1,4 +1,3 @@
-from typing import Optional
 from pydantic import BaseModel
 
 
@@ -10,5 +9,5 @@ class SymbolStatistics(BaseModel):
     priceToBook: float
     priceToEarnings: float
     earningsPerShare: float
-    dividendRate: Optional[float] = None
-    dividendYieldPercentage: Optional[float] = None
+    dividendRate: float | None = None
+    dividendYieldPercentage: float | None = None
