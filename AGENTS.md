@@ -5,7 +5,7 @@ This file gives short, practical instructions for working in this repository.
 ## Project Snapshot
 - Domain: Finance data API backed by Yahoo Finance (`yfinance`)
 - Stack: FastAPI, Uvicorn, Pydantic v2, Redis (optional cache persistence)
-- Runtime baseline: Python 3.11 (matches Dockerfile)
+- Runtime baseline: Python 3.14.3 (Dockerfile default); supported range is Python 3.12 to 3.14.
 
 ## Repository Layout
 - `/home/andreas/IdeaProjects/fastfinance/app` application code
@@ -18,7 +18,7 @@ This file gives short, practical instructions for working in this repository.
 - `/home/andreas/IdeaProjects/fastfinance/docker-compose.yml` local Redis service
 
 ## Common Commands
-- Create venv: `python3.11 -m venv .venv`
+- Create venv: `python3 -m venv .venv` (with `python3 --version` in range 3.12 to 3.14)
 - Activate venv: `source .venv/bin/activate`
 - Install deps: `pip install -r requirements.txt`
 - Run API (dev): `uvicorn app.main:app --reload`
@@ -28,7 +28,7 @@ This file gives short, practical instructions for working in this repository.
 - Run with Skaffold: `skaffold dev`
 
 ## Python and verification policy
-- Prefer Python 3.11 for local parity with Docker image runtime.
+- Prefer Python 3.14.3 for local parity with Docker image runtime; Python 3.12 to 3.14 are supported.
 - Use a project-local virtual environment (`.venv`) for all local development commands.
 - Keep dependency updates explicit in `requirements.txt`; do not introduce undeclared transitive assumptions.
 - After code changes, run at least a syntax/import sanity check: `python -m compileall app`.

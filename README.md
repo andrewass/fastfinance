@@ -1,12 +1,12 @@
 # FastFinance
 
-[![](https://img.shields.io/badge/python-3.11-blue.svg?style=flat)](https://www.python.org/)
+[![](https://img.shields.io/badge/python-3.12--3.14-blue.svg?style=flat)](https://www.python.org/)
 
 FastFinance is a FastAPI backend that exposes stock/market information from [yfinance](https://github.com/ranaroussi/yfinance), including prices, holders, profile data, and statistics.
 
 ## Tech Stack
 
-- Python `3.11`
+- Python `3.12 - 3.14` (including `3.14.3`)
 - FastAPI
 - Uvicorn (ASGI server)
 - Pydantic v2 + pydantic-settings
@@ -27,13 +27,14 @@ FastFinance is a FastAPI backend that exposes stock/market information from [yfi
 
 ### Prerequisites
 
-- Python 3.11
+- Python 3.12 to 3.14
 - Docker (optional, for local Redis)
 
 ### 1) Create virtual environment and install dependencies
 
 ```bash
-python3.11 -m venv .venv
+python3 --version
+python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 ```
@@ -150,6 +151,7 @@ Repository automation currently includes:
 
 - Dependabot configuration (`.github/dependabot.yml`)
 - Dependabot auto-merge workflow for patch/minor updates (`.github/workflows/dependabot-auto-merge.yml`)
+- Python compatibility workflow across 3.12/3.13/3.14 (`.github/workflows/python-version-compat.yml`)
 
 ## Practical Notes
 
