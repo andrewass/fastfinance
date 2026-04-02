@@ -4,6 +4,7 @@ from fastapi import FastAPI
 
 from .cache.cache import Cache
 from .cache.cachedecorator import configure_cache, clear_cache
+from .errors.problem import register_problem_handlers
 from .holders import holdersrouter
 from .price import pricerouter
 from .profile import profilerouter
@@ -24,6 +25,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(version="0.0.1", lifespan=lifespan)
+register_problem_handlers(app)
 
 app.include_router(pricerouter.router)
 app.include_router(statisticsrouter.router)

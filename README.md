@@ -135,6 +135,18 @@ Interactive docs:
 - `GET /statistics/{symbol}`
   - Get financial statistics (market cap, price-to-book, price-to-earnings, EPS, dividends).
 
+## Error Format
+
+Errors are returned as RFC 7807 Problem Details (`application/problem+json`) with stable standard fields:
+
+- `type`
+- `title`
+- `status`
+- `detail`
+- `instance`
+
+Domain-specific context (for example `provider`, `context`, `symbol`, `missingFields`) is included as extension fields when relevant.
+
 ## Kubernetes
 
 Key files:

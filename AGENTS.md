@@ -51,6 +51,7 @@ This file gives short, practical instructions for working in this repository.
 
 ## Dependency & import hygiene
 - When introducing a new library, add it to `requirements.txt` in the same change.
+- Before introducing a new direct dependency/import in application code, ask the user for confirmation first. If confirmed, add the dependency to `requirements.txt` in the same change.
 - Remove unused imports from touched Python files before finishing.
 - Prefer explicit imports from local modules over star imports.
 
@@ -60,6 +61,7 @@ This file gives short, practical instructions for working in this repository.
 ## Working Notes
 - `yfinance` calls are network-bound and may fail or return partial fields.
 - Wrap outbound `yfinance` operations with `app/integration/yfinanceclient.py::call_yfinance` so transport/TLS/provider exceptions are translated to controlled `502` responses.
+- Keep API error responses aligned with RFC 7807 (`application/problem+json`) via centralized handlers in `app/errors/problem.py`.
 - For expected upstream fields, fail fast with explicit, controlled API errors (for example `502`) and include which fields are missing.
 - Reserve optional/nullable response fields for domain-optional data only, not as a fallback for upstream inconsistencies.
 - Cache persistence defaults to in-memory via `Settings.persistence`; Redis behavior depends on active persistence wiring.
