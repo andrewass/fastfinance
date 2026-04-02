@@ -33,7 +33,6 @@ FastFinance is a FastAPI backend that exposes stock/market information from [yfi
 ### 1) Create virtual environment and install dependencies
 
 ```bash
-python3 --version
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt

@@ -59,6 +59,7 @@ This file gives short, practical instructions for working in this repository.
 
 ## Working Notes
 - `yfinance` calls are network-bound and may fail or return partial fields.
+- Wrap outbound `yfinance` operations with `app/integration/yfinanceclient.py::call_yfinance` so transport/TLS/provider exceptions are translated to controlled `502` responses.
 - For expected upstream fields, fail fast with explicit, controlled API errors (for example `502`) and include which fields are missing.
 - Reserve optional/nullable response fields for domain-optional data only, not as a fallback for upstream inconsistencies.
 - Cache persistence defaults to in-memory via `Settings.persistence`; Redis behavior depends on active persistence wiring.

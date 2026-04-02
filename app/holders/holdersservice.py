@@ -6,13 +6,22 @@ from pandas import DataFrame, Timestamp
 
 from .holdersresponse import HoldersResponse, Holder
 from ..cache.cachedecorator import simple_cache
+from ..integration.yfinanceclient import call_yfinance
 
 
 @simple_cache(expire=timedelta(minutes=5))
 def get_holders_details_symbol(symbol: str) -> HoldersResponse:
-    ticker = yf.Ticker(symbol)
-    institutional_holders = ticker.institutional_holders
-    mutual_fund_holders = ticker.mutualfund_holders
+    ticker = call_yfinance(symbol, "holders.init", lambda: yf.Ticker(symbol))
+    institutional_holders = call_yfinance(
+        symbol,
+        "holders.institutional",
+        lambda: ticker.institutional_holders,
+    )
+    mutual_fund_holders = call_yfinance(
+        symbol,
+        "holders.mutualFund",
+        lambda: ticker.mutualfund_holders,
+    )
     missing = []
     if institutional_holders is None:
         missing.append("institutional_holders")
