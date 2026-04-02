@@ -60,7 +60,12 @@ This file gives short, practical instructions for working in this repository.
 
 ## Working Notes
 - `yfinance` calls are network-bound and may fail or return partial fields.
-- Wrap outbound `yfinance` operations with `app/integration/yfinanceclient.py::call_yfinance` so transport/TLS/provider exceptions are translated to controlled `502` responses.
+- Wrap outbound `yfinance` operations with `app/integration/yfinanceclient.py::call_yfinance` so provider exceptions are translated to controlled HTTP errors (for example `429` rate-limit and `502` upstream failures).
+- Prefer `app/integration/yfinanceclient.py::call_ticker` for service-level yfinance access; it applies `YF_IMPERSONATION_MODE` centrally.
+- `YF_IMPERSONATION_MODE` options: `auto` (default), `chrome`, `firefox`, `none`.
+- Fallback behavior exists only for `auto`: impersonated attempt first, then one retry with `none` if TLS impersonation fails.
+- Linux guidance: prefer `auto` by default, or `none` to skip the initial impersonated attempt.
+- Keep local overrides in `.env.local` (gitignored) and document example values in `README.md` when introducing new environment-configurable behavior.
 - Keep API error responses aligned with RFC 7807 (`application/problem+json`) via centralized handlers in `app/errors/problem.py`.
 - For expected upstream fields, fail fast with explicit, controlled API errors (for example `502`) and include which fields are missing.
 - Reserve optional/nullable response fields for domain-optional data only, not as a fallback for upstream inconsistencies.

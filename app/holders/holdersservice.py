@@ -1,26 +1,19 @@
 from datetime import timedelta
 
-import yfinance as yf
 from fastapi import HTTPException
 from pandas import DataFrame, Timestamp
 
 from .holdersresponse import HoldersResponse, Holder
 from ..cache.cachedecorator import simple_cache
-from ..integration.yfinanceclient import call_yfinance
+from ..integration.yfinanceclient import call_ticker
 
 
 @simple_cache(expire=timedelta(minutes=5))
 def get_holders_details_symbol(symbol: str) -> HoldersResponse:
-    ticker = call_yfinance(symbol, "holders.init", lambda: yf.Ticker(symbol))
-    institutional_holders = call_yfinance(
+    institutional_holders, mutual_fund_holders = call_ticker(
         symbol,
-        "holders.institutional",
-        lambda: ticker.institutional_holders,
-    )
-    mutual_fund_holders = call_yfinance(
-        symbol,
-        "holders.mutualFund",
-        lambda: ticker.mutualfund_holders,
+        "holders.details",
+        lambda ticker: (ticker.institutional_holders, ticker.mutualfund_holders),
     )
     missing = []
     if institutional_holders is None:

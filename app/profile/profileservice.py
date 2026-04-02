@@ -1,8 +1,7 @@
-import yfinance as yf
 from fastapi import HTTPException
 
 from .profileresponses import Profile
-from ..integration.yfinanceclient import call_yfinance
+from ..integration.yfinanceclient import call_ticker
 
 
 def require_fields(info: dict, symbol: str, fields: tuple[str, ...], context: str):
@@ -21,7 +20,7 @@ def require_fields(info: dict, symbol: str, fields: tuple[str, ...], context: st
 
 
 def get_profile(symbol: str):
-    info = call_yfinance(symbol, "profile.details", lambda: yf.Ticker(symbol).info)
+    info = call_ticker(symbol, "profile.details", lambda ticker: ticker.info)
     require_fields(
         info,
         symbol,

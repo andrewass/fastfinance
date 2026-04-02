@@ -91,11 +91,32 @@ Current defaults:
 
 - `cache_enabled = true`
 - cache persistence defaults to in-memory (`MemoryPersistence`)
+- `YF_IMPERSONATION_MODE = auto`
 - Redis defaults:
   - `host = redis`
   - `port = 6379`
   - `user = default`
   - `password = redisDockerTestPassword`
+
+Use `.env.local` (gitignored) for local overrides.
+
+Example `.env.local`:
+
+```env
+YF_IMPERSONATION_MODE=auto
+```
+
+`YF_IMPERSONATION_MODE` behavior:
+
+- `auto` (recommended): tries impersonated session (`chrome`) first, then retries once with non-impersonated session if TLS impersonation fails (for example curl error 35 / invalid library).
+- `chrome`: always use impersonated `chrome` session, no fallback.
+- `firefox`: always use impersonated `firefox` session, no fallback.
+- `none`: always use non-impersonated session.
+
+Practical recommendation:
+
+- Linux: start with `auto`; use `none` only if you want to skip the initial impersonated attempt.
+- Windows/macOS: keep `auto` unless you have a specific reason to force one mode.
 
 ## API Overview
 
@@ -146,6 +167,10 @@ Errors are returned as RFC 7807 Problem Details (`application/problem+json`) wit
 - `instance`
 
 Domain-specific context (for example `provider`, `context`, `symbol`, `missingFields`) is included as extension fields when relevant.
+
+For upstream constraints, FastFinance may return:
+- `429` when upstream rate limiting is detected.
+- `502` when upstream provider transport/data errors occur.
 
 ## Kubernetes
 

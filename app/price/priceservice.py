@@ -1,14 +1,13 @@
 from datetime import timedelta
 from typing import Any
 
-import yfinance as yf
 from fastapi import HTTPException
 from pandas import DataFrame, Timestamp
 
 from .pricerequests import Period
 from .priceresponses import HistoricalPrice, CurrentPrice, HistoricalPricesResponse
 from ..cache.cachedecorator import simple_cache
-from ..integration.yfinanceclient import call_yfinance
+from ..integration.yfinanceclient import call_ticker
 
 
 def require_fields(info: dict[str, Any], symbol: str, fields: tuple[str, ...], context: str):
@@ -27,7 +26,7 @@ def require_fields(info: dict[str, Any], symbol: str, fields: tuple[str, ...], c
 
 
 def get_current_price(symbol: str):
-    info = call_yfinance(symbol, "price.current", lambda: yf.Ticker(symbol).info)
+    info = call_ticker(symbol, "price.current", lambda ticker: ticker.info)
     require_fields(
         info,
         symbol,
@@ -45,7 +44,7 @@ def get_current_price(symbol: str):
 
 @simple_cache(expire=timedelta(minutes=10))
 def get_historical_prices(symbol: str, period: Period):
-    history = call_yfinance(symbol, "price.historical", lambda: yf.Ticker(symbol).history(period=period))
+    history = call_ticker(symbol, "price.historical", lambda ticker: ticker.history(period=period))
     if history.empty:
         raise HTTPException(
             status_code=502,
