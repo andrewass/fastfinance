@@ -39,6 +39,7 @@ This file gives short, practical instructions for working in this repository.
 ## Conventions
 - Keep routers thin; put data fetching/transformation logic in feature service modules.
 - Use request/response models for API boundaries and keep response shape stable for existing endpoints.
+- Keep required API contract fields strict. Do not mark expected/required response fields as `None`/optional just to avoid failures.
 - Keep cache behavior explicit and deterministic; cached service functions should return model objects compatible with `.model_dump()`.
 - Prefer small, focused modules by feature (`price`, `holders`, `profile`, `statistics`).
 - Centralize environment-driven settings under `app/settings`.
@@ -57,7 +58,9 @@ This file gives short, practical instructions for working in this repository.
 - Commit messages must start with a capital letter.
 
 ## Working Notes
-- `yfinance` calls are network-bound and may fail or return partial fields; handle missing values defensively.
+- `yfinance` calls are network-bound and may fail or return partial fields.
+- For expected upstream fields, fail fast with explicit, controlled API errors (for example `502`) and include which fields are missing.
+- Reserve optional/nullable response fields for domain-optional data only, not as a fallback for upstream inconsistencies.
 - Cache persistence defaults to in-memory via `Settings.persistence`; Redis behavior depends on active persistence wiring.
 - If changing cache serialization shape, verify compatibility with both memory and Redis persistence implementations.
 - Be careful with long-running blocking work in request handlers; document tradeoffs when keeping sync calls in async routes.
@@ -92,4 +95,3 @@ This file gives short, practical instructions for working in this repository.
 - Activate `uvicorn` for runtime configuration, worker/process model, proxy headers, socket binding, and timeout/logging controls.
 - For mixed tasks, combine all relevant skills rather than choosing only one.
 - Use this priority when guidance conflicts: API correctness and safety (`fastapi`) before runtime tuning (`uvicorn`) before style/ergonomics.
-

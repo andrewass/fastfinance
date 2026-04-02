@@ -1,5 +1,6 @@
 from enum import Enum
-from dataclasses import dataclass
+
+from pydantic import BaseModel
 
 
 class Period(str, Enum):
@@ -16,6 +17,5 @@ class Period(str, Enum):
     max_interval = "max"
 
 
-@dataclass
-class SymbolsRequest:
+class SymbolsRequest(BaseModel):
     symbols: list[str]

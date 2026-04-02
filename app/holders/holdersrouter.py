@@ -9,6 +9,6 @@ router = APIRouter(
 )
 
 
-@router.get("/{symbol}")
-async def get_holders_details(symbol: str) -> HoldersResponse:
+@router.get("/{symbol}", response_model=HoldersResponse)
+def get_holders_details(symbol: str) -> HoldersResponse:
     return get_holders_details_symbol(symbol)

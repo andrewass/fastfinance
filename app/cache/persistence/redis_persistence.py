@@ -6,16 +6,15 @@ from ...settings.redissettings import redis_settings
 
 
 class RedisPersistence(Persistence):
-    redis = redis.Redis(
-        host=redis_settings.host,
-        port=redis_settings.port,
-        username=redis_settings.user,
-        password=redis_settings.password,
-        decode_responses=True
-    )
 
     def __init__(self):
-        pass
+        self.redis = redis.Redis(
+            host=redis_settings.host,
+            port=redis_settings.port,
+            username=redis_settings.user,
+            password=redis_settings.password,
+            decode_responses=True
+        )
 
     def get_response_value(self, key: str):
         return self.redis.json().get(key)
@@ -27,4 +26,7 @@ class RedisPersistence(Persistence):
         self.redis.json().set(key, Path.root_path(), value)
 
     def clear_storage(self):
-        self.redis.delete()
+        self.redis.flushdb()
+
+    def close(self):
+        self.redis.close()

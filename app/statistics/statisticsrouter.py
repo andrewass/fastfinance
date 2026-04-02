@@ -1,4 +1,5 @@
 from fastapi import APIRouter
+from .statisticsresponses import SymbolStatistics
 from .statisticsservice import get_financial_details
 
 router = APIRouter(
@@ -7,6 +8,6 @@ router = APIRouter(
 )
 
 
-@router.get("/{symbol}")
-async def get_financial_details_symbol(symbol: str):
+@router.get("/{symbol}", response_model=SymbolStatistics)
+def get_financial_details_symbol(symbol: str) -> SymbolStatistics:
     return get_financial_details(symbol)
