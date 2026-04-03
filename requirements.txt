@@ -2,7 +2,7 @@ fastapi==0.135.2
 starlette==1.0.0
 uvicorn==0.42.0
 yfinance==1.2.0
-curl_cffi==0.13.0
+curl_cffi==0.14.0
 pydantic==2.12.5
 pydantic-settings==2.13.1
 pandas==3.0.1
