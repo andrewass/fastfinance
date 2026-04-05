@@ -8,14 +8,14 @@ This file gives short, practical instructions for working in this repository.
 - Runtime baseline: Python 3.14.3 (Dockerfile default); supported range is Python 3.12 to 3.14.
 
 ## Repository Layout
-- `/home/andreas/IdeaProjects/fastfinance/app` application code
-- `/home/andreas/IdeaProjects/fastfinance/app/main.py` FastAPI entrypoint and router registration
-- `/home/andreas/IdeaProjects/fastfinance/app/*/*router.py` API routers by feature
-- `/home/andreas/IdeaProjects/fastfinance/app/*/*service.py` business/data-fetch logic
-- `/home/andreas/IdeaProjects/fastfinance/app/settings` app and Redis settings
-- `/home/andreas/IdeaProjects/fastfinance/app/cache` cache abstraction/decorator/persistence
-- `/home/andreas/IdeaProjects/fastfinance/k8s` Kubernetes manifests
-- `/home/andreas/IdeaProjects/fastfinance/docker-compose.yml` local Redis service
+- `app` application code
+- `app/main.py` FastAPI entrypoint and router registration
+- `app/*/*router.py` API routers by feature
+- `app/*/*service.py` business/data-fetch logic
+- `app/settings` app and Redis settings
+- `app/cache` cache abstraction/decorator/persistence
+- `k8s` Kubernetes manifests
+- `docker-compose.yml` local Redis service
 
 ## Common Commands
 - Create venv: `python3 -m venv .venv` (with `python3 --version` in range 3.12 to 3.14)
@@ -61,10 +61,10 @@ This file gives short, practical instructions for working in this repository.
 ## Working Notes
 - `yfinance` calls are network-bound and may fail or return partial fields.
 - Wrap outbound `yfinance` operations with `app/integration/yfinanceclient.py::call_yfinance` so provider exceptions are translated to controlled HTTP errors (for example `429` rate-limit and `502` upstream failures).
-- Prefer `app/integration/yfinanceclient.py::call_ticker` for service-level yfinance access; it applies `YF_IMPERSONATION_MODE` centrally.
-- `YF_IMPERSONATION_MODE` options: `auto` (default), `chrome`, `firefox`, `none`.
-- Fallback behavior exists only for `auto`: impersonated attempt first, then one retry with `none` if TLS impersonation fails.
-- Linux guidance: prefer `auto` by default, or `none` to skip the initial impersonated attempt.
+- Prefer `app/integration/yfinanceclient.py::call_ticker` for service-level yfinance access.
+- Keep `app/integration/yfinanceclient.py` as a generic anti-corruption layer: all provider execution and provider-oriented error translation belong there, while domain mapping stays in feature services.
+- Use `app/integration/yfinanceclient.py::raise_upstream_data_error` for consistent `502` errors when expected upstream fields are missing.
+- Do not import `yfinance` outside `app/integration/yfinanceclient.py`.
 - Keep local overrides in `.env.local` (gitignored) and document example values in `README.md` when introducing new environment-configurable behavior.
 - Keep API error responses aligned with RFC 7807 (`application/problem+json`) via centralized handlers in `app/errors/problem.py`.
 - For expected upstream fields, fail fast with explicit, controlled API errors (for example `502`) and include which fields are missing.

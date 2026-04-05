@@ -1,11 +1,10 @@
 from datetime import timedelta
 
-from fastapi import HTTPException
 from pandas import DataFrame, Timestamp
 
 from .holdersresponse import HoldersResponse, Holder
 from ..cache.cachedecorator import simple_cache
-from ..integration.yfinanceclient import call_ticker
+from ..integration.yfinanceclient import call_ticker, raise_upstream_data_error
 
 
 @simple_cache(expire=timedelta(minutes=5))
@@ -21,16 +20,7 @@ def get_holders_details_symbol(symbol: str) -> HoldersResponse:
     if mutual_fund_holders is None:
         missing.append("mutualfund_holders")
     if missing:
-        raise HTTPException(
-            status_code=502,
-            detail={
-                "message": "Missing expected fields from upstream provider",
-                "provider": "yfinance",
-                "context": "holders.details",
-                "symbol": symbol,
-                "missingFields": missing,
-            },
-        )
+        raise_upstream_data_error(symbol, "holders.details", missing)
     return HoldersResponse(
         institutionalHolders=map_holders(institutional_holders, symbol, "holders.institutional"),
         mutualFundHolders=map_holders(mutual_fund_holders, symbol, "holders.mutualFund")
@@ -39,29 +29,11 @@ def get_holders_details_symbol(symbol: str) -> HoldersResponse:
 
 def map_holders(frame: DataFrame | None, symbol: str, context: str) -> list[Holder]:
     if frame is None:
-        raise HTTPException(
-            status_code=502,
-            detail={
-                "message": "Missing expected fields from upstream provider",
-                "provider": "yfinance",
-                "context": context,
-                "symbol": symbol,
-                "missingFields": ["frame"],
-            },
-        )
+        raise_upstream_data_error(symbol, context, ["frame"])
     required_columns = ("Date Reported", "Holder", "Shares", "% Out", "Value")
     missing_columns = [column for column in required_columns if column not in frame.columns]
     if missing_columns:
-        raise HTTPException(
-            status_code=502,
-            detail={
-                "message": "Missing expected fields from upstream provider",
-                "provider": "yfinance",
-                "context": context,
-                "symbol": symbol,
-                "missingFields": missing_columns,
-            },
-        )
+        raise_upstream_data_error(symbol, context, missing_columns)
     holders_list = []
     for index, row in frame.iterrows():
         date: Timestamp = row.get("Date Reported")
@@ -81,16 +53,11 @@ def map_holders(frame: DataFrame | None, symbol: str, context: str) -> list[Hold
         if value is None:
             missing.append("Value")
         if missing:
-            raise HTTPException(
-                status_code=502,
-                detail={
-                    "message": "Missing expected fields from upstream provider",
-                    "provider": "yfinance",
-                    "context": f"{context}.row",
-                    "symbol": symbol,
-                    "rowIndex": str(index),
-                    "missingFields": missing,
-                },
+            raise_upstream_data_error(
+                symbol,
+                f"{context}.row",
+                missing,
+                rowIndex=str(index),
             )
         holders_list.append(Holder(
             name=name,

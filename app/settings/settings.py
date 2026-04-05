@@ -1,5 +1,3 @@
-from typing import Literal
-
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from app.cache.persistence.memory_persistence import MemoryPersistence
@@ -15,7 +13,6 @@ class Settings(BaseSettings):
 
     cache_enabled: bool = True
     persistence: Persistence = MemoryPersistence()
-    yf_impersonation_mode: Literal["auto", "chrome", "firefox", "none"] = "auto"
 
 
 settings = Settings()

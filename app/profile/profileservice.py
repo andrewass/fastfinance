@@ -1,22 +1,11 @@
-from fastapi import HTTPException
-
 from .profileresponses import Profile
-from ..integration.yfinanceclient import call_ticker
+from ..integration.yfinanceclient import call_ticker, raise_upstream_data_error
 
 
 def require_fields(info: dict, symbol: str, fields: tuple[str, ...], context: str):
     missing = [field for field in fields if info.get(field) is None]
     if missing:
-        raise HTTPException(
-            status_code=502,
-            detail={
-                "message": "Missing expected fields from upstream provider",
-                "provider": "yfinance",
-                "context": context,
-                "symbol": symbol,
-                "missingFields": missing,
-            },
-        )
+        raise_upstream_data_error(symbol, context, missing)
 
 
 def get_profile(symbol: str):

@@ -91,7 +91,6 @@ Current defaults:
 
 - `cache_enabled = true`
 - cache persistence defaults to in-memory (`MemoryPersistence`)
-- `YF_IMPERSONATION_MODE = auto`
 - Redis defaults:
   - `host = redis`
   - `port = 6379`
@@ -99,24 +98,6 @@ Current defaults:
   - `password = redisDockerTestPassword`
 
 Use `.env.local` (gitignored) for local overrides.
-
-Example `.env.local`:
-
-```env
-YF_IMPERSONATION_MODE=auto
-```
-
-`YF_IMPERSONATION_MODE` behavior:
-
-- `auto` (recommended): tries impersonated session (`chrome`) first, then retries once with non-impersonated session if TLS impersonation fails (for example curl error 35 / invalid library).
-- `chrome`: always use impersonated `chrome` session, no fallback.
-- `firefox`: always use impersonated `firefox` session, no fallback.
-- `none`: always use non-impersonated session.
-
-Practical recommendation:
-
-- Linux: start with `auto`; use `none` only if you want to skip the initial impersonated attempt.
-- Windows/macOS: keep `auto` unless you have a specific reason to force one mode.
 
 ## API Overview
 
