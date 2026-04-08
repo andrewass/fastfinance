@@ -6,3 +6,5 @@ pydantic==2.12.5
 pydantic-settings==2.13.1
 pandas==3.0.2
 redis==7.4.0
+pytest==9.0.3
+httpx==0.28.1

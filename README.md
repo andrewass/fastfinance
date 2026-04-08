@@ -80,6 +80,34 @@ Run with Skaffold:
 skaffold dev
 ```
 
+## Testing
+
+Run tests from the project virtual environment:
+
+```bash
+python -m pytest -q
+```
+
+If your virtual environment is not activated, run:
+
+Windows (PowerShell):
+
+```powershell
+.\.venv\Scripts\python.exe -m pytest -q
+```
+
+Linux/macOS:
+
+```bash
+.venv/bin/python -m pytest -q
+```
+
+Recommended quick sanity check before tests:
+
+```bash
+python -m compileall app
+```
+
 ## Configuration
 
 Primary settings are defined in:

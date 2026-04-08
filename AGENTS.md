@@ -21,6 +21,8 @@ This file gives short, practical instructions for working in this repository.
 - Create venv: `python3 -m venv .venv` (with `python3 --version` in range 3.12 to 3.14)
 - Activate venv: `source .venv/bin/activate`
 - Install deps: `pip install -r requirements.txt`
+- Run tests (activated venv): `python -m pytest -q`
+- Run tests (Windows, non-activated venv): `.\.venv\Scripts\python.exe -m pytest -q`
 - Run API (dev): `uvicorn app.main:app --reload`
 - Run API (prod-like): `uvicorn app.main:app --host 0.0.0.0 --port 8000`
 - Start local Redis: `docker compose up -d redis`
@@ -47,6 +49,13 @@ This file gives short, practical instructions for working in this repository.
 ## Quality & Checks
 - No repository-wide lint/test command is currently configured in this repo.
 - For behavior changes, add or update tests where practical (typically by introducing `tests/` + `pytest` in the same change when requested).
+- Run relevant tests before creating a commit; do not commit changes that fail tests.
+- If the user explicitly asks to run tests, run them even if a commit is not planned.
+- Agent test execution flow:
+  - Run `python -m compileall app`.
+  - Run `python -m pytest -q` (or `.\.venv\Scripts\python.exe -m pytest -q` on Windows without activated venv).
+  - If tests fail, report failing tests/errors and do not commit before resolved.
+- If tests cannot be executed because of environment/tooling constraints, report the blocker clearly and do not claim they passed.
 - Preserve backward compatibility for existing route paths unless the task explicitly calls for a breaking API change.
 
 ## Dependency & import hygiene
@@ -78,6 +87,8 @@ This file gives short, practical instructions for working in this repository.
 - Place reusable skills in `.agents/skills/**` as the default location.
 - Do not hardcode repository names, repo-specific paths, or project-only assumptions in reusable skills.
 - If project-specific behavior is needed, keep it clearly marked as optional project overlay guidance.
+- For every newly created skill, include a `references/` folder with at least one reference file, and link it from `SKILL.md` under a `References` section.
+- Keep `SKILL.md` concise; put detailed guidance and examples in `references/` files.
 - If `.agents/skills/**` is not writable, stop and ask the user how to proceed before creating skills in any alternate directory.
 
 ## Skill folder grouping
