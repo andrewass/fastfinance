@@ -30,7 +30,22 @@ FastFinance is a FastAPI backend that exposes stock/market information from [yfi
 - Python 3.12 to 3.14
 - Docker (optional, for local Redis)
 
+Commands below are labeled by operating system where they differ:
+
+- `Windows (PowerShell)` for PowerShell on Windows
+- `Linux/macOS` for bash/zsh-compatible shells on Linux and macOS
+
 ### 1) Create virtual environment and install dependencies
+
+Windows (PowerShell):
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+```
+
+Linux/macOS:
 
 ```bash
 python3 -m venv .venv
@@ -40,6 +55,8 @@ pip install -r requirements.txt
 
 ### 2) (Optional) Start Redis
 
+Same command on Windows, Linux, and macOS:
+
 ```bash
 docker compose up -d redis
 ```
@@ -48,14 +65,30 @@ docker compose up -d redis
 
 Development:
 
+Windows (PowerShell):
+
+```powershell
+.\.venv\Scripts\python.exe -m uvicorn app.main:app --reload
+```
+
+Linux/macOS:
+
 ```bash
-uvicorn app.main:app --reload
+python -m uvicorn app.main:app --reload
 ```
 
 Production-like local run:
 
+Windows (PowerShell):
+
+```powershell
+.\.venv\Scripts\python.exe -m uvicorn app.main:app --host 0.0.0.0 --port 8000
+```
+
+Linux/macOS:
+
 ```bash
-uvicorn app.main:app --host 0.0.0.0 --port 8000
+python -m uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
 
 The API is available at `http://localhost:8000`.
@@ -64,15 +97,25 @@ The API is available at `http://localhost:8000`.
 
 Build Docker image:
 
+Same command on Windows, Linux, and macOS:
+
 ```bash
 docker build -t fastfinance-image .
 ```
 
 Basic code sanity check:
 
+Windows (PowerShell):
+
+```powershell
+.\.venv\Scripts\python.exe -m compileall app
+```
+
+Linux/macOS:
+
 ```bash
 python -m compileall app
-```
+``` 
 
 Run with Skaffold:
 
@@ -88,7 +131,7 @@ Run tests from the project virtual environment:
 python -m pytest -q
 ```
 
-If your virtual environment is not activated, run:
+Without activating the virtual environment:
 
 Windows (PowerShell):
 
@@ -103,6 +146,14 @@ Linux/macOS:
 ```
 
 Recommended quick sanity check before tests:
+
+Windows (PowerShell):
+
+```powershell
+.\.venv\Scripts\python.exe -m compileall app
+```
+
+Linux/macOS:
 
 ```bash
 python -m compileall app

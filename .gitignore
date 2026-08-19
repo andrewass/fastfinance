@@ -1,5 +1,7 @@
 *.pyc
 
 .idea
+.temp
 .codex
 .env.*
+.vscode/launch.json
