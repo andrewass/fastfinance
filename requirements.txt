@@ -1,7 +1,7 @@
 fastapi==0.141.1
 starlette==1.6.0
-uvicorn==0.52.2
-yfinance==1.5.2
+uvicorn==0.52.3
+yfinance==1.6.0
 pydantic==2.13.4
 pydantic-settings==2.15.0
 pandas==3.0.5
